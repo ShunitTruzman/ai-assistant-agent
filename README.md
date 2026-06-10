@@ -5,18 +5,22 @@ request *and* a definition of "done"; a worker LLM attempts the task with a tool
 evaluator LLM checks the result and either accepts it, asks you for input, or sends it back for
 another attempt. Runs in a small Gradio web UI.
 
+
 ## How it works
 
+```mermaid
+flowchart TD
+    U([Your request + success criteria]) --> W[Worker LLM]
+    W -->|needs a tool| T[Tools: web search / browser / files]
+    T --> W
+    W -->|final answer| E[Evaluator LLM]
+    E -->|criteria met, or needs your input, or hit the cap| DONE([Done])
+    E -->|not good enough -> try again with feedback| W
 ```
-        ┌──────────────► tools ──────┐
-        │                            ▼
-START ─► worker ──(needs tools)──────┘
-        │ (final answer)
-        ▼
-     evaluator ──(criteria met / needs you / hit cap)──► END
-        │ (rejected, under cap)
-        └──────────────► back to worker (with feedback)
-```
+
+In one sentence: a **worker** tries to do the task with tools; an **evaluator** checks the result
+against your success criteria and either accepts it or sends it back for another try.
+
 
 - **Worker** (LLM + tools) attempts the task, looping through tools as needed.
 - **Evaluator** (LLM with structured output) judges the answer against your success criteria and
@@ -28,10 +32,7 @@ START ─► worker ──(needs tools)──────┘
 ## Tools
 
 - 🌐 **Web search** (Serper) and **page browsing** (Playwright — drives a real Chromium browser)
-- 📚 **Wikipedia** lookup
-- 🐍 **Python REPL**
 - 📁 **File management** (sandboxed to `sandbox/`)
-- 🔔 **Push notification** (Pushover; optional — degrades gracefully if not configured)
 
 ## Setup
 
@@ -45,9 +46,6 @@ Create a `.env`:
 ```
 OPENAI_API_KEY=...
 SERPER_API_KEY=...
-# optional:
-# PUSHOVER_TOKEN=...
-# PUSHOVER_USER=...
 ```
 
 ## Run
@@ -78,7 +76,7 @@ iteration-cap decisions) with no API keys or browser required.
 
 - `app.py` — Gradio UI
 - `assistant.py` — the agent: LangGraph worker/evaluator graph
-- `tools.py` — the toolbox (search, browser, files, Python, Wikipedia, push)
+- `tools.py` — the toolbox (search, browser, files)
 - `logic.py` — pure routing logic (unit-tested)
 - `tests/` — routing tests
 

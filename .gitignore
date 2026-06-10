@@ -1,0 +1,20 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Agent runtime artifacts
+memory.db
+memory.db-*
+sandbox/*
+!sandbox/.gitkeep
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
