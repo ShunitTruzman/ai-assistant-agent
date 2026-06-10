@@ -5,9 +5,6 @@ request *and* a definition of "done"; a worker LLM attempts the task with a tool
 evaluator LLM checks the result and either accepts it, asks you for input, or sends it back for
 another attempt. Runs in a small Gradio web UI.
 
-> ⚠️ This agent can run arbitrary Python and browse the web on your machine. Run it locally as a
-> demo; don't expose it to untrusted input.
-
 ## How it works
 
 ```
@@ -85,9 +82,3 @@ iteration-cap decisions) with no API keys or browser required.
 - `logic.py` — pure routing logic (unit-tested)
 - `tests/` — routing tests
 
-## Notes
-
-Based on a course project (a LangGraph worker/evaluator agent) and extended: a configurable
-**iteration cap** to stop runaway retry loops, **configurable worker/evaluator models**, a
-**graceful** (optional) push tool, a **headless-configurable** browser, unit tests for the routing
-logic, and project hygiene (`.gitignore`, `requirements.txt`).
